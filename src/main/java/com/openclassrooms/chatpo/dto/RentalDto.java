@@ -2,6 +2,10 @@ package com.openclassrooms.chatpo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatpo.models.Rental;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +21,15 @@ public class RentalDto {
 
     private Integer id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String name;
 
+    @PositiveOrZero
     private BigDecimal surface;
 
+    @PositiveOrZero
     private BigDecimal price;
 
     //TODO conversion en fileSysteme et recuperation de l'url

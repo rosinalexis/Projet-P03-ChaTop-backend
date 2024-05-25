@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatpo.models.Message;
 import com.openclassrooms.chatpo.models.Rental;
 import com.openclassrooms.chatpo.models.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +20,9 @@ public class MessageDto {
 
     private Integer id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String message;
 
     @JsonProperty("user_id")

@@ -1,6 +1,7 @@
 package com.openclassrooms.chatpo.dto;
 
 import com.openclassrooms.chatpo.models.User;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,12 +15,23 @@ public class UserDto {
 
     private Integer id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String name;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Email
     private String email;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Size(min = 6, max = 16)
     private String password;
-    
+
     public static UserDto fromEntity(User user) {
 
         return UserDto.builder()
