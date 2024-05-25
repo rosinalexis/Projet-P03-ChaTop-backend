@@ -1,6 +1,5 @@
 package com.openclassrooms.chatpo.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Message  extends AbstractEntity{
+public class Message extends AbstractEntity {
 
     private String message;
 
