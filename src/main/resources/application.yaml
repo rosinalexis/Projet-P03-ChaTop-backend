@@ -1,0 +1,15 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/chatop
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  application:
+    name: chatop
