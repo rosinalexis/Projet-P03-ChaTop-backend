@@ -46,8 +46,19 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
+    public Integer updateById(Integer id, RentalDto dto) {
+        validator.validate(dto);
+        Rental rental = RentalDto.toEntity(dto);
+        rental.setId(id);
+        return rentalRepository.save(rental).getId();
+    }
+
+
+    @Override
     public void delete(Integer id) {
 
         rentalRepository.deleteById(id);
     }
+
+
 }

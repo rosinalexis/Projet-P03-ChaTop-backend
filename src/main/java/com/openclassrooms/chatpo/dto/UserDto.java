@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -32,6 +34,9 @@ public class UserDto {
     @Size(min = 6, max = 16)
     private String password;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     public static UserDto fromEntity(User user) {
 
         return UserDto.builder()
@@ -39,6 +44,8 @@ public class UserDto {
                 .name(user.getName())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .updatedAt(user.getUpdatedAt())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 

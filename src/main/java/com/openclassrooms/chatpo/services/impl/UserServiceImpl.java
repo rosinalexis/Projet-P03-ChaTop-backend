@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer save(UserDto dto) {
         validator.validate(dto);
+        //
         User user = UserDto.toEntity(dto);
         return userRepository.save(user).getId();
     }

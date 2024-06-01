@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -39,6 +40,9 @@ public class RentalDto {
 
     @JsonProperty("owner_id")
     private Integer ownerId;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static RentalDto fromEntity(Rental rental) {
 
