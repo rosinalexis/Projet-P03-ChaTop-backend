@@ -1,5 +1,6 @@
 package com.openclassrooms.chatpo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatpo.models.User;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -32,10 +33,14 @@ public class UserDto {
     @NotBlank
     @NotEmpty
     @Size(min = 6, max = 16)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @JsonProperty("created_at")
+    private LocalDate createdAt;
+
+    @JsonProperty("updated_at")
+    private LocalDate updatedAt;
 
     public static UserDto fromEntity(User user) {
 

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionRepresentation> handleException(ObjectValidationException e) {
         //log
         ExceptionRepresentation representation = ExceptionRepresentation.builder()
-                .errorMessage("Object not valid exception has occured")
+                .errorMessage("Object not valid exception has occurred")
                 .errorSource(e.getViolationSource())
                 .validationErrors(e.getViolations())
                 .build();

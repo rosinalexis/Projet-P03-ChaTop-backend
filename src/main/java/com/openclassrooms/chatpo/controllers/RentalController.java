@@ -25,6 +25,10 @@ public class RentalController {
 
         Map<String, String> response = new HashMap<>();
 
+        //Todo recuperation de l'utilisateur courant
+        int ownerId = 1;
+
+        rentalDto.setOwnerId(ownerId);
         if (rentalService.save(rentalDto) > 0) {
             response.put("message", "Rental created !");
         }
@@ -62,7 +66,7 @@ public class RentalController {
         if (rentalService.updateById(rentalId, rentalDto) > 0) {
             response.put("message", "Rental updated !");
         }
-        
+
         return ResponseEntity.ok(response);
     }
 

@@ -2,6 +2,7 @@ package com.openclassrooms.chatpo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openclassrooms.chatpo.models.Rental;
+import com.openclassrooms.chatpo.models.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -41,8 +42,9 @@ public class RentalDto {
     @JsonProperty("owner_id")
     private Integer ownerId;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDate createdAt;
+
+    private LocalDate updatedAt;
 
     public static RentalDto fromEntity(Rental rental) {
 
@@ -54,6 +56,8 @@ public class RentalDto {
                 .picture(rental.getPicture())
                 .description(rental.getDescription())
                 .ownerId(rental.getOwner().getId())
+                .updatedAt(rental.getUpdatedAt())
+                .createdAt(rental.getCreatedAt())
                 .build();
     }
 
@@ -66,7 +70,9 @@ public class RentalDto {
                 .price(rental.getPrice())
                 .picture(rental.getPicture())
                 .description(rental.getDescription())
-                .ownerId(rental.getOwnerId())
+                .owner(User.builder()
+                        .id(rental.getOwnerId())
+                        .build())
                 .build();
     }
 

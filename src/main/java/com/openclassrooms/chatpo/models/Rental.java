@@ -16,19 +16,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Rental extends AbstractEntity{
+public class Rental extends AbstractEntity {
 
     private String name;
     private BigDecimal surface;
     private BigDecimal price;
     private String picture;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "owner_id")
-    private Integer ownerId;
-
     @ManyToOne
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     @OneToMany(mappedBy = "rental")

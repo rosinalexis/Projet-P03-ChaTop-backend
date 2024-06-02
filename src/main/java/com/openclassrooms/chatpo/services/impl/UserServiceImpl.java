@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer save(UserDto dto) {
         validator.validate(dto);
-        //
+        //Todo utilisation du passwordEncodeur pour le mot de passe
         User user = UserDto.toEntity(dto);
         return userRepository.save(user).getId();
     }

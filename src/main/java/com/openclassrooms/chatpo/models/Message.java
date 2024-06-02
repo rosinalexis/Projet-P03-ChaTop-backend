@@ -20,10 +20,10 @@ public class Message extends AbstractEntity {
     private String message;
 
     @ManyToOne
-    @JoinColumn(name = "rental_id", insertable = false, updatable = false)
+    @JoinColumn(name = "rental_id")
     private Rental rental;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 }
