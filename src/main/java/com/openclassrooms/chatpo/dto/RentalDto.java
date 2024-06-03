@@ -37,6 +37,9 @@ public class RentalDto {
     //TODO conversion en fileSysteme et recuperation de l'url
     private String picture;
 
+    @NotEmpty
+    @NotBlank
+    @NotNull
     private String description;
 
     @JsonProperty("owner_id")

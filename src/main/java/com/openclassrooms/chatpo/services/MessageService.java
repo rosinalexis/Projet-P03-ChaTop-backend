@@ -1,6 +1,7 @@
 package com.openclassrooms.chatpo.services;
 
-import com.openclassrooms.chatpo.dto.MessageDto;
+import com.openclassrooms.chatpo.models.Message;
 
-public interface MessageService extends AbstractService<MessageDto> {
+public interface MessageService {
+    Integer save(Message message);
 }

@@ -1,6 +1,9 @@
 package com.openclassrooms.chatpo.services;
 
-import com.openclassrooms.chatpo.dto.UserDto;
+import com.openclassrooms.chatpo.models.User;
 
-public interface UserService extends AbstractService<UserDto> {
+public interface UserService {
+    Integer save(User user);
+
+    User findById(Integer id);
 }

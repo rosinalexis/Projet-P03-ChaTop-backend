@@ -1,6 +1,7 @@
 package com.openclassrooms.chatpo.controllers;
 
 import com.openclassrooms.chatpo.dto.UserDto;
+import com.openclassrooms.chatpo.models.User;
 import com.openclassrooms.chatpo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{user-id}")
+
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDto> findById(
-            @PathVariable("user-id") Integer userId
+            @PathVariable("userId") Integer userId
     ) {
-        return ResponseEntity.ok(userService.findById(userId));
+
+        User user = userService.findById(userId);
+        return ResponseEntity.ok(UserDto.fromEntity(user));
     }
 
 }

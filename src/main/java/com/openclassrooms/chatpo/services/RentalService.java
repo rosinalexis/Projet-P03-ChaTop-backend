@@ -1,7 +1,16 @@
 package com.openclassrooms.chatpo.services;
 
-import com.openclassrooms.chatpo.dto.RentalDto;
+import com.openclassrooms.chatpo.models.Rental;
 
-public interface RentalService extends AbstractService<RentalDto> {
-    Integer updateById(Integer userId, RentalDto rentalDto);
+import java.util.List;
+
+public interface RentalService {
+
+    Integer save(Rental rental);
+
+    List<Rental> findAll();
+
+    Rental findById(Integer id);
+
+    Integer update(Integer id, Rental rental);
 }

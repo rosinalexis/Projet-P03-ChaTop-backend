@@ -1,15 +1,18 @@
 package com.openclassrooms.chatpo.controllers;
 
+import com.openclassrooms.chatpo.dto.MessageResponseDto;
 import com.openclassrooms.chatpo.dto.RentalDto;
+import com.openclassrooms.chatpo.models.Rental;
 import com.openclassrooms.chatpo.services.RentalService;
+import com.openclassrooms.chatpo.validators.ObjectsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/rentals")
@@ -17,57 +20,75 @@ import java.util.Map;
 public class RentalController {
 
     private final RentalService rentalService;
+    private final ObjectsValidator<RentalDto> validator;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> save(
+    public ResponseEntity<MessageResponseDto> save(
             @ModelAttribute RentalDto rentalDto
     ) {
+        MessageResponseDto messageResponseDto = new MessageResponseDto();
 
-        Map<String, String> response = new HashMap<>();
-
-        //Todo recuperation de l'utilisateur courant
+        //Todo récuperation de l'utilisateur courant via jwt
         int ownerId = 1;
-
         rentalDto.setOwnerId(ownerId);
-        if (rentalService.save(rentalDto) > 0) {
-            response.put("message", "Rental created !");
+
+        validator.validate(rentalDto);
+
+        Rental rental = RentalDto.toEntity(rentalDto);
+
+        if (rentalService.save(rental) > 0) {
+            messageResponseDto.setMessage("Rental created !");
         }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(messageResponseDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, List<RentalDto>>> findAll() {
+    public ResponseEntity<List<RentalDto>> findAll() {
 
-        Map<String, List<RentalDto>> response = new HashMap<>();
+        List<Rental> rentailList = rentalService.findAll();
 
-        List<RentalDto> rentailList = rentalService.findAll();
+        List<RentalDto> rentalDtoList = new ArrayList<>();
 
-        response.put("rentals", rentailList);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        for (Rental rental : rentailList) {
+            rentalDtoList.add(RentalDto.fromEntity(rental));
+        }
+
+        return new ResponseEntity<>(rentalDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{rental-id}")
+    @GetMapping("/{rentalId}")
     public ResponseEntity<RentalDto> findById(
-            @PathVariable("rental-id") Integer rentalId) {
+            @PathVariable("rentalId") Integer rentalId) {
 
-        return ResponseEntity.ok(rentalService.findById(rentalId));
+        Rental rental = rentalService.findById(rentalId);
+
+        return ResponseEntity.ok(RentalDto.fromEntity(rental));
     }
 
 
-    @PutMapping("/{rental-id}")
-    public ResponseEntity<Map<String, String>> updateById(
-            @PathVariable("rental-id") Integer rentalId,
+    @PutMapping(name = "/{rentalId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MessageResponseDto> updateById(
+            //@RequestPart("file") MultipartFile file,
+            @PathVariable("rentalId") Integer rentalId,
             @RequestBody RentalDto rentalDto
     ) {
 
-        Map<String, String> response = new HashMap<>();
+        MessageResponseDto messageResponseDto = new MessageResponseDto();
 
-        if (rentalService.updateById(rentalId, rentalDto) > 0) {
-            response.put("message", "Rental updated !");
+        //Todo récuperation de l'utilisateur courant via jwt
+        int ownerId = 1;
+        rentalDto.setOwnerId(ownerId);
+
+        validator.validate(rentalDto);
+
+        Rental rental = RentalDto.toEntity(rentalDto);
+
+        if (rentalService.update(rentalId, rental) > 0) {
+            messageResponseDto.setMessage("Rental updated !");
         }
 
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }
 
 
