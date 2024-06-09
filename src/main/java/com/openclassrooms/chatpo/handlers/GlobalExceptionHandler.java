@@ -6,11 +6,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
 
@@ -26,8 +29,8 @@ public class GlobalExceptionHandler {
                 .body(representation);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ExceptionRepresentation> handleException(EntityNotFoundException e) {
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionRepresentation> handleException(UsernameNotFoundException e) {
         ExceptionRepresentation representation = ExceptionRepresentation.builder()
                 .errorMessage(e.getMessage())
                 .build();
@@ -36,8 +39,18 @@ public class GlobalExceptionHandler {
                 .body(representation);
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ExceptionRepresentation> handleException(UsernameNotFoundException e) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ExceptionRepresentation> handleException(AuthenticationException e) {
+        ExceptionRepresentation representation = ExceptionRepresentation.builder()
+                .errorMessage(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(representation);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionRepresentation> handleException(EntityNotFoundException e) {
         ExceptionRepresentation representation = ExceptionRepresentation.builder()
                 .errorMessage(e.getMessage())
                 .build();

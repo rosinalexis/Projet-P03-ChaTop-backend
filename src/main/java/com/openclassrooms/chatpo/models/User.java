@@ -1,19 +1,20 @@
 package com.openclassrooms.chatpo.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -27,11 +28,6 @@ public class User extends AbstractEntity implements UserDetails, Principal {
     private String email;
     private String name;
     private String password;
-    private boolean accountLocked;
-    private boolean enabled;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
 
     @OneToMany(mappedBy = "owner")
     private List<Rental> rentals;
@@ -41,11 +37,7 @@ public class User extends AbstractEntity implements UserDetails, Principal {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles
-                .stream()
-                .map(r -> new SimpleGrantedAuthority(r.getName()))
-                .collect(Collectors.toSet());
-
+        return new HashSet<>();
     }
 
     @Override
@@ -70,6 +62,6 @@ public class User extends AbstractEntity implements UserDetails, Principal {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 }

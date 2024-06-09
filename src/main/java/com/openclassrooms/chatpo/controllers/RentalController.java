@@ -3,12 +3,15 @@ package com.openclassrooms.chatpo.controllers;
 import com.openclassrooms.chatpo.dto.MessageResponseDto;
 import com.openclassrooms.chatpo.dto.RentalDto;
 import com.openclassrooms.chatpo.models.Rental;
+import com.openclassrooms.chatpo.models.User;
 import com.openclassrooms.chatpo.services.RentalService;
+import com.openclassrooms.chatpo.services.UserService;
 import com.openclassrooms.chatpo.validators.ObjectsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,15 +24,18 @@ public class RentalController {
 
     private final RentalService rentalService;
     private final ObjectsValidator<RentalDto> validator;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<MessageResponseDto> save(
-            @ModelAttribute RentalDto rentalDto
+            @ModelAttribute RentalDto rentalDto,
+            Authentication authUser
     ) {
         MessageResponseDto messageResponseDto = new MessageResponseDto();
 
-        //Todo récuperation de l'utilisateur courant via jwt
-        int ownerId = 1;
+        User user = userService.findByEmail(authUser.getName());
+        int ownerId = user.getId();
+
         rentalDto.setOwnerId(ownerId);
 
         validator.validate(rentalDto);
@@ -71,13 +77,14 @@ public class RentalController {
     public ResponseEntity<MessageResponseDto> updateById(
             //@RequestPart("file") MultipartFile file,
             @PathVariable("rentalId") Integer rentalId,
-            @RequestBody RentalDto rentalDto
+            @RequestBody RentalDto rentalDto,
+            Authentication authUser
     ) {
 
         MessageResponseDto messageResponseDto = new MessageResponseDto();
 
-        //Todo récuperation de l'utilisateur courant via jwt
-        int ownerId = 1;
+        User user = userService.findByEmail(authUser.getName());
+        int ownerId = user.getId();
         rentalDto.setOwnerId(ownerId);
 
         validator.validate(rentalDto);

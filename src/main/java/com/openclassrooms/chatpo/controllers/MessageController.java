@@ -27,6 +27,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<MessageResponseDto> save(
             @RequestBody MessageDto messageDto
+
     ) {
         log.debug("messageDto: {}", messageDto);
         validator.validate(messageDto);
