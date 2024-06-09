@@ -1,11 +1,15 @@
 package com.openclassrooms.chatpo.controllers;
 
-import com.openclassrooms.chatpo.dto.LoginRequest;
+import com.openclassrooms.chatpo.dto.LoginRequestDto;
+import com.openclassrooms.chatpo.dto.RegistrationRequestDto;
 import com.openclassrooms.chatpo.dto.TokenDto;
 import com.openclassrooms.chatpo.dto.UserDto;
+import com.openclassrooms.chatpo.models.Token;
 import com.openclassrooms.chatpo.models.User;
 import com.openclassrooms.chatpo.services.UserService;
+import com.openclassrooms.chatpo.services.auth.AuthenticationService;
 import com.openclassrooms.chatpo.validators.ObjectsValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,37 +24,34 @@ public class AuthenticationController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
     private final UserService userService;
-    private final ObjectsValidator<UserDto> validator;
+    private final ObjectsValidator<RegistrationRequestDto> validator;
+    private final ObjectsValidator<LoginRequestDto> loginValidator;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<TokenDto> save(
-            @RequestBody UserDto userDto) {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TokenDto> register(
+            @RequestBody @Valid RegistrationRequestDto request) {
 
-        TokenDto tokenDto = new TokenDto();
-        validator.validate(userDto);
-        //Todo utilisation du passwordEncodeur pour le mot de passe
-        User user = UserDto.toEntity(userDto);
+        validator.validate(request);
 
-        if (userService.save(user) > 0) {
-            tokenDto.setToken("jwt");
-        }
+        Token token = authenticationService.register(request);
 
-        //Todo : création du jwt via dans un package independent
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(
-            @RequestBody LoginRequest loginRequest
+            @RequestBody @Valid LoginRequestDto loginRequest
     ) {
 
-        TokenDto tokenDto = new TokenDto();
+        loginValidator.validate(loginRequest);
 
-        //Todo : création du jwt via dans un package independent
         log.debug("Login request: {} {}", loginRequest.getLogin(), loginRequest.getPassword());
-        tokenDto.setToken("jwt");
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        Token token = authenticationService.authenticate(loginRequest);
+        
+        return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
 
     @GetMapping("/me")

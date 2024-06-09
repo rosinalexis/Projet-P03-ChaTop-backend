@@ -1,13 +1,13 @@
 package com.openclassrooms.chatpo.repositories;
 
-import com.openclassrooms.chatpo.models.User;
+import com.openclassrooms.chatpo.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    Optional<User> findByEmail(String email);
+    Optional<Role> findByName(String role);
 }

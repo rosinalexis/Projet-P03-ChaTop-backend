@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -37,10 +37,10 @@ public class UserDto {
     private String password;
 
     @JsonProperty("created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @JsonProperty("updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     public static UserDto fromEntity(User user) {
 

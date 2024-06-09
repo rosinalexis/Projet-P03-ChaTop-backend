@@ -2,7 +2,13 @@ server:
   port: 3001
   servlet:
     context-path: /api
+
 spring:
+  application:
+    name: chatop
+  servlet:
+    multipart:
+      max-file-size: 50MB
   datasource:
     url: jdbc:mysql://localhost:3306/chatop
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,5 +19,13 @@ spring:
       ddl-auto: create
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
-  application:
-    name: chatop
+
+springdoc:
+  default-produces-media-type: application/json
+
+
+application:
+  security:
+    jwt:
+      secret-key: eyJhbGciOiJIUzI1NiJ9eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNzc5MzEyMSwiaWF0IjoxNzE3NzkzMTIxfQAGwpFGfUBPeiFfh0EINuUodLQqQpulmJvnFsoGSMf34
+      expiration: 6000
