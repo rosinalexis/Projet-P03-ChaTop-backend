@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -33,9 +33,9 @@ public class RentalDto {
 
     @PositiveOrZero
     private BigDecimal price;
-
-    //TODO conversion en fileSysteme et recuperation de l'url
-    private String picture;
+    
+    @JsonProperty(value = "picture", access = JsonProperty.Access.READ_ONLY)
+    private String pictureUrl;
 
     @NotEmpty
     @NotBlank
@@ -45,9 +45,9 @@ public class RentalDto {
     @JsonProperty("owner_id")
     private Integer ownerId;
 
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
     public static RentalDto fromEntity(Rental rental) {
 
@@ -56,7 +56,7 @@ public class RentalDto {
                 .name(rental.getName())
                 .surface(rental.getSurface())
                 .price(rental.getPrice())
-                .picture(rental.getPicture())
+                .pictureUrl(rental.getPicture())
                 .description(rental.getDescription())
                 .ownerId(rental.getOwner().getId())
                 .updatedAt(rental.getUpdatedAt())
@@ -71,7 +71,7 @@ public class RentalDto {
                 .name(rental.getName())
                 .surface(rental.getSurface())
                 .price(rental.getPrice())
-                .picture(rental.getPicture())
+                .picture(rental.getPictureUrl())
                 .description(rental.getDescription())
                 .owner(User.builder()
                         .id(rental.getOwnerId())

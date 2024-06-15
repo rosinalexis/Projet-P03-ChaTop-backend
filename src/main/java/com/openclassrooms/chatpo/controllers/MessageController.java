@@ -27,15 +27,14 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<MessageResponseDto> save(
             @RequestBody MessageDto messageDto
-
     ) {
-        log.debug("messageDto: {}", messageDto);
         validator.validate(messageDto);
         MessageResponseDto messageResponseDto = new MessageResponseDto();
         Message message = MessageDto.toEntity(messageDto);
 
         if (messageService.save(message) > 0) {
             messageResponseDto.setMessage("Message send with success");
+            log.info("Message creation status [OK]");
         }
         return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }

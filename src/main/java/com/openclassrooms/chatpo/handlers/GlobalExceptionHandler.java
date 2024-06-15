@@ -1,5 +1,6 @@
 package com.openclassrooms.chatpo.handlers;
 
+import com.openclassrooms.chatpo.exceptions.FileNotFoundException;
 import com.openclassrooms.chatpo.exceptions.ObjectValidationException;
 import com.openclassrooms.chatpo.exceptions.OperationNonPermittedException;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,6 +60,25 @@ public class GlobalExceptionHandler {
                 .body(representation);
     }
 
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<ExceptionRepresentation> handleException(FileNotFoundException e) {
+        ExceptionRepresentation representation = ExceptionRepresentation.builder()
+                .errorMessage(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(representation);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ExceptionRepresentation> handleException(IllegalArgumentException e) {
+        ExceptionRepresentation representation = ExceptionRepresentation.builder()
+                .errorMessage(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(representation);
+    }
 
     @ExceptionHandler(OperationNonPermittedException.class)
     public ResponseEntity<ExceptionRepresentation> handleException(OperationNonPermittedException e) {

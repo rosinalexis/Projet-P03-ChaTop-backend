@@ -40,6 +40,8 @@ public class AuthenticationController {
 
         Token token = authenticationService.register(request);
 
+        log.info("User registration [OK]");
+
         return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
 
@@ -50,9 +52,9 @@ public class AuthenticationController {
 
         loginValidator.validate(loginRequest);
 
-        log.debug("Login request: {} {}", loginRequest.getLogin(), loginRequest.getPassword());
-
         Token token = authenticationService.authenticate(loginRequest);
+
+        log.info("User login  with token [OK]");
 
         return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
@@ -63,20 +65,8 @@ public class AuthenticationController {
     ) {
         User user = userService.findByEmail(authUser.getName());
 
-        //final String authHeader = request.getHeader("Authorization");
-
-
-        /*if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new Exception("Exception message");
-        }*/
-
-        //String jwt = authHeader.substring(7);
-
-        //String userEmail = jwtService.extractUsername(jwt);
-        //User user = userService.findByEmail(userEmail);
+        log.info("User identification [OK]");
 
         return ResponseEntity.ok(UserDto.fromEntity(user));
-
-        //return null;
     }
 }

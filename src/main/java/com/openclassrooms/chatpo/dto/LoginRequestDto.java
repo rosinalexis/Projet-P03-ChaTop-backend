@@ -18,7 +18,7 @@ public class LoginRequestDto {
     @NotBlank
     @NotEmpty
     @Email
-    private String login;
+    private String email;
 
     @NotNull
     @NotBlank

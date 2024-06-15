@@ -25,9 +25,10 @@ public class MessageDto {
     @NotEmpty
     private String message;
 
+    @NotNull
     @JsonProperty("user_id")
     private Integer userId;
-
+    @NotNull
     @JsonProperty("rental_id")
     private Integer rentalId;
 
