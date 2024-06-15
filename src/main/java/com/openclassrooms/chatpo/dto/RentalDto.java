@@ -33,9 +33,9 @@ public class RentalDto {
 
     @PositiveOrZero
     private BigDecimal price;
-
-    //TODO conversion en fileSysteme et recuperation de l'url
-    private String picture;
+    
+    @JsonProperty(value = "picture", access = JsonProperty.Access.READ_ONLY)
+    private String pictureUrl;
 
     @NotEmpty
     @NotBlank
@@ -56,7 +56,7 @@ public class RentalDto {
                 .name(rental.getName())
                 .surface(rental.getSurface())
                 .price(rental.getPrice())
-                .picture(rental.getPicture())
+                .pictureUrl(rental.getPicture())
                 .description(rental.getDescription())
                 .ownerId(rental.getOwner().getId())
                 .updatedAt(rental.getUpdatedAt())
@@ -71,7 +71,7 @@ public class RentalDto {
                 .name(rental.getName())
                 .surface(rental.getSurface())
                 .price(rental.getPrice())
-                .picture(rental.getPicture())
+                .picture(rental.getPictureUrl())
                 .description(rental.getDescription())
                 .owner(User.builder()
                         .id(rental.getOwnerId())
