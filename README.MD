@@ -36,6 +36,7 @@ les propriétaires pour louer des propriétés.
 2. **Configuration de la Base de Données:**
 
 * Créez une base de données MySQL.
+* Importez les informations du fichier `/db/chatop.sql`
 * Configurez les informations de connexion dans src/main/resources/application.properties.
 
 3. **Compilation et Exécution:**
@@ -50,7 +51,7 @@ les propriétaires pour louer des propriétés.
 
 5. **Documentation de l'API:**
 
-* Accédez à Swagger UI pour explorer et tester l'API: `http://localhost:8080/swagger-ui/`
+* Accédez à Swagger UI pour explorer et tester l'API: `http://localhost:3001/api/swagger-ui/`
 
 ## Usage
 
