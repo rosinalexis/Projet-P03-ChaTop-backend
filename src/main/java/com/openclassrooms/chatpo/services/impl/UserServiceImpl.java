@@ -5,18 +5,33 @@ import com.openclassrooms.chatpo.repositories.UserRepository;
 import com.openclassrooms.chatpo.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public Integer save(User user) {
-        return userRepository.save(user).getId();
+    public User save(User user) {
+        Optional<User> findUser = userRepository.findByEmail(user.getEmail());
+
+        if (findUser.isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUpdatedAt(LocalDate.now());
+
+        return userRepository.save(user);
+
     }
 
 
