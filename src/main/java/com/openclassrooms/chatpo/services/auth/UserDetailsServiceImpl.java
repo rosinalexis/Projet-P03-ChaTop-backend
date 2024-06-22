@@ -1,5 +1,6 @@
 package com.openclassrooms.chatpo.services.auth;
 
+
 import com.openclassrooms.chatpo.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,3 +22,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No user was found with the provided email."));
     }
 }
+

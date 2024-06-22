@@ -1,5 +1,6 @@
 package com.openclassrooms.chatpo.handlers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,11 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ExceptionRepresentation {
-    
+
     @JsonProperty("message")
     private String errorMessage;
+    @JsonIgnore
     private String errorSource;
+    @JsonIgnore
     private Set<String> validationErrors;
 }

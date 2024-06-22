@@ -1,16 +1,17 @@
 package com.openclassrooms.chatpo.controllers;
 
-import com.openclassrooms.chatpo.dto.LoginRequestDto;
-import com.openclassrooms.chatpo.dto.RegistrationRequestDto;
-import com.openclassrooms.chatpo.dto.TokenDto;
-import com.openclassrooms.chatpo.dto.UserDto;
+import com.openclassrooms.chatpo.dto.*;
 import com.openclassrooms.chatpo.models.Token;
 import com.openclassrooms.chatpo.models.User;
 import com.openclassrooms.chatpo.services.UserService;
 import com.openclassrooms.chatpo.services.auth.AuthenticationService;
-import com.openclassrooms.chatpo.services.auth.JwtService;
 import com.openclassrooms.chatpo.validators.ObjectsValidator;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AuthenticationController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
@@ -29,25 +31,70 @@ public class AuthenticationController {
     private final ObjectsValidator<RegistrationRequestDto> validator;
     private final ObjectsValidator<LoginRequestDto> loginValidator;
     private final AuthenticationService authenticationService;
-    private final JwtService jwtService;
 
+    @Operation(
+            description = "Post endpoint for registering a new user. This endpoint validates the registration request, creates a new user with the provided details, saves the user to the database, generates an authentication token for the user, and returns the token.",
+            summary = "Register a new user and generate an authentication token",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    schema = @Schema(implementation = TokenDto.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "401",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TokenDto.class)
+                            )
+                    )
+            }
+    )
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<TokenDto> register(
-            @RequestBody @Valid RegistrationRequestDto request) {
+            @RequestBody RegistrationRequestDto request) {
 
         validator.validate(request);
 
-        Token token = authenticationService.register(request);
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setName(request.getName());
+
+        user = userService.save(user);
+
+        Token token = authenticationService.generateToken(user);
 
         log.info("User registration [OK]");
 
         return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Post endpoint for user login. This endpoint validates the login request, authenticates the user with the provided credentials, generates an authentication token for the user, and returns the token.",
+            summary = "Authenticate a user and generate an authentication token",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Login successful, authentication token returned",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TokenDto.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Authentication failed",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = MessageDto.class)
+                            )
+                    )
+            }
+    )
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(
-            @RequestBody @Valid LoginRequestDto loginRequest
+            @RequestBody LoginRequestDto loginRequest
     ) {
 
         loginValidator.validate(loginRequest);
@@ -59,7 +106,32 @@ public class AuthenticationController {
         return new ResponseEntity<>(TokenDto.fromEntity(token), HttpStatus.OK);
     }
 
+
+    @Operation(
+            description = "Get endpoint to retrieve the current authenticated user's information. This endpoint requires a valid authentication token.",
+            summary = "Retrieve current authenticated user information",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "User information retrieved successfully",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDto.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized, invalid or missing authentication token",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = MessageDto.class))
+                    )
+            }
+    )
     @GetMapping("/me")
+    @SecurityRequirement(
+            name = "bearerAuth"
+    )
     public ResponseEntity<UserDto> getCurrentUser(
             Authentication authUser
     ) {

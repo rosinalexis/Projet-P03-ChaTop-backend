@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,9 +34,12 @@ public class RentalDto {
 
     @PositiveOrZero
     private BigDecimal price;
-    
+
     @JsonProperty(value = "picture", access = JsonProperty.Access.READ_ONLY)
     private String pictureUrl;
+
+    @JsonProperty(value = "picture", access = JsonProperty.Access.WRITE_ONLY)
+    private MultipartFile picture;
 
     @NotEmpty
     @NotBlank
