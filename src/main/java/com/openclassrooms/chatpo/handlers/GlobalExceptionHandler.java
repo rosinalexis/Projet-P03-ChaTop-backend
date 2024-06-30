@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionRepresentation> handleException(ObjectValidationException e) {
         ExceptionRepresentation representation = ExceptionRepresentation.builder()
                 .errorMessage("Object not valid exception has occurred")
-                //.errorSource(e.getViolationSource())
-                //.validationErrors(e.getViolations())
+                .errorSource(e.getViolationSource())
+                .validationErrors(e.getViolations())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(representation);

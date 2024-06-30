@@ -49,9 +49,9 @@ public class RentalDto {
     @JsonProperty("owner_id")
     private Integer ownerId;
 
-    private LocalDate createdAt;
+    private LocalDate created_at;
 
-    private LocalDate updatedAt;
+    private LocalDate updated_at;
 
     public static RentalDto fromEntity(Rental rental) {
 
@@ -63,8 +63,8 @@ public class RentalDto {
                 .pictureUrl(rental.getPicture())
                 .description(rental.getDescription())
                 .ownerId(rental.getOwner().getId())
-                .updatedAt(rental.getUpdatedAt())
-                .createdAt(rental.getCreatedAt())
+                .updated_at(rental.getUpdatedAt())
+                .created_at(rental.getCreatedAt())
                 .build();
     }
 

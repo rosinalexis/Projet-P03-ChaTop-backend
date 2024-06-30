@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/rentals")
@@ -121,13 +122,16 @@ public class RentalController {
     )
     @GetMapping
     public ResponseEntity<RentalResponseDto> findAll() {
+        List<RentalDto> rentals = rentalService.findAll().stream().map(
+                RentalDto::fromEntity
+        ).collect(Collectors.toList());
 
-        List<Rental> rentailList = rentalService.findAll();
+        RentalResponseDto rentalResponseDto = new RentalResponseDto();
+        rentalResponseDto.setRentals(rentals);
 
-        RentalResponseDto rentalDtoList = new RentalResponseDto(rentailList);
         log.info("rentals found ! [OK]");
 
-        return new ResponseEntity<>(rentalDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(rentalResponseDto, HttpStatus.OK);
     }
 
     @Operation(
